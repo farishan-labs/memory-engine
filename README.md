@@ -22,6 +22,7 @@ memory recall 'regex'
 memory status
 memory push        # git push store
 memory pull        # git pull store
+memory --version   # print CLI version
 ```
 
 ## Files
