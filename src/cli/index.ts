@@ -60,6 +60,10 @@ function scanSecrets(scanner: string): { ok: boolean; output: string } {
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
+  if (args.includes("--version") || args.includes("-V")) {
+    console.log("memory 0.2.0");
+    return;
+  }
   if (args.length === 0) {
     usage();
     return;
