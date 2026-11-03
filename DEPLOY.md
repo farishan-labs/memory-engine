@@ -1,0 +1,146 @@
+# Deployment — memory (Phase 0) to han (VPS) and Mac (personal mode)
+
+Repo: https://github.com/farishan/memory (private)
+Binary: `~/.local/bin/memory` (compiled single binary via `bun build --compile`)
+
+## Prerequisites (both machines)
+- Bun >= 1.4 (`curl -fsSL https://bun.sh/install | bash`)
+- Git + SSH key with read access to `farishan/memory` and `farishan/optmem`
+- `~/.optmem/memory` clone present (optmem store) — do NOT modify it
+- `~/.local/bin` on PATH
+
+---
+
+## han (VPS) — Ubuntu, ZeroClaw
+
+### 1. Install Bun + clone
+```sh
+curl -fsSL https://bun.sh/install | bash
+source ~/.bashrc
+git clone git@github.com:farishan/memory.git ~/dev/memory
+cd ~/dev/memory && bun install && bun run build
+```
+
+### 2. Config
+```sh
+mkdir -p ~/.config/memory ~/.local/state/memory
+cat > ~/.config/memory/config.yaml <<'EOF'
+active_adapter: optmem
+identity:
+  user: faris
+  machine: han
+adapters:
+  optmem:
+    data_dir: ~/.optmem/memory
+    memo_bin: ~/.optmem/memo
+    git_remote: git@github.com:farishan/optmem.git
+    max_bytes: 280
+sync:
+  transport: git
+  auto_push: false
+  auto_pull: false
+  lock_file: ~/.local/state/memory/write.lock
+secrets:
+  scanner: ~/dev/memory/scripts/scan-secrets.sh
+  block_on_match: true
+EOF
+chmod +x ~/dev/memory/scripts/scan-secrets.sh
+```
+
+### 3. Identity anchor
+Ensure `~/.optmem/memory/MEMORY.md` has `Machine: han` (source of truth on conflict).
+
+### 4. Verify
+```sh
+memory status        # adapter optmem, data dir, sync status
+memory wake | head   # should print memory context
+memory list-adapters # optmem
+```
+
+### 5. (optional) nightly pull
+```sh
+# crontab -e
+0 3 * * * /home/ubuntu/.local/bin/memory pull >/dev/null 2>&1
+```
+
+### han-specific notes
+- han runs as `ubuntu`; ensure `~/.optmem/memo` is executable and `~/.optmem/memory` is a git worktree.
+- SSH key for git: `~/.ssh/` deploy key or personal key with read access.
+- No OpenCode on VPS (ZeroClaw only) — `memory` is CLI-only there, fine.
+- Lock file must be on local disk (default is) — do not put on NFS.
+
+---
+
+## Mac (personal mode) — macOS
+
+### 1. Install Bun + clone
+```sh
+curl -fsSL https://bun.sh/install | bash
+# restart shell, then:
+git clone git@github.com:farishan/memory.git ~/dev/memory
+cd ~/dev/memory && bun install && bun run build
+```
+
+### 2. Config
+```sh
+mkdir -p ~/.config/memory ~/.local/state/memory
+cat > ~/.config/memory/config.yaml <<'EOF'
+active_adapter: optmem
+identity:
+  user: faris
+  machine: mac
+adapters:
+  optmem:
+    data_dir: ~/.optmem/memory
+    memo_bin: ~/.optmem/memo
+    git_remote: git@github.com:farishan/optmem.git
+    max_bytes: 280
+sync:
+  transport: git
+  auto_push: false
+  auto_pull: false
+  lock_file: ~/.local/state/memory/write.lock
+secrets:
+  scanner: ~/dev/memory/scripts/scan-secrets.sh
+  block_on_match: true
+EOF
+chmod +x ~/dev/memory/scripts/scan-secrets.sh
+```
+
+### 3. Identity anchor
+Ensure `~/.optmem/memory/MEMORY.md` has `Machine: mac`.
+
+### 4. Verify
+```sh
+memory status
+memory wake | head
+memory list-adapters
+```
+
+### 5. Daily habit
+- `memory pull` before work, `memory push` after (manual; auto_* off by default).
+- On the Hubton-owned work Mac, use personal mode only; do not store work secrets in the memory store.
+
+### Mac-specific notes
+- `proper-lockfile` works on macOS; `flock(1)` is not default — the CLI uses the Node package, fine.
+- Bun compiled binary works on macOS (arm64/x64). Rebuild on the Mac (do not copy the Linux binary).
+- Git auth via `gh` CLI (personal account farishan) or SSH key.
+
+---
+
+## Post-deploy validation (all machines)
+- [ ] `memory status` green
+- [ ] `memory wake` prints context
+- [ ] `memory note "deploy test on <machine>"` succeeds
+- [ ] `memory push` commits + pushes without secrets-scan block
+- [ ] On a second machine, `memory pull` sees the new note
+- [ ] `MEMORY.md` identity line matches machine
+
+## Rollback
+- `memory` is additive; `~/.optmem/memo` keeps working. If `memory` breaks, fall back to `~/.optmem/memo <cmd>` directly.
+- To remove: `rm ~/.local/bin/memory`, keep `~/.optmem/` untouched.
+
+## Open follow-ups
+- Migrate AGENTS.md + opencode plugin to call `memory` instead of `~/.optmem/memo` (Phase 2).
+- Decide Mac identity name (currently "mac"; could be "oscar-mac" if same person).
+- Create GitHub remote for `farishan/memory` (done on Oscar; clone on others uses it).
