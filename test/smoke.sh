@@ -15,4 +15,7 @@ echo "== wake (first part) =="
 echo "== recall =="
 "$MEM" recall "memory" >/dev/null
 
+echo "== version =="
+"$MEM" --version | grep -q '^memory '
+
 echo "ALL MEMORY SMOKE TESTS PASSED"
