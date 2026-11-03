@@ -28,6 +28,7 @@ memory pull        # git pull store
 
 - `SPEC.md` — full specification, config schema, adapter contract, migration, deployment.
 - `adapters/README.md` — adapter contract + optmem adapter notes.
+- `DEPLOY.md` — deployment steps for han (VPS) and Mac (personal mode).
 
 ## Identity
 
