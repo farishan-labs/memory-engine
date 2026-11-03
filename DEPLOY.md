@@ -4,21 +4,32 @@ Repo: https://github.com/farishan/memory (private)
 Binary: `~/.local/bin/memory` (compiled single binary via `bun build --compile`)
 
 ## Prerequisites (both machines)
-- Bun >= 1.4 (`curl -fsSL https://bun.sh/install | bash`)
 - Git + SSH key with read access to `farishan/memory` and `farishan/optmem`
 - `~/.optmem/memory` clone present (optmem store) — do NOT modify it
 - `~/.local/bin` on PATH
+- **Bun is NOT required on target machines.** The `memory` binary is a
+  self-contained compiled executable (Bun runtime embedded). Build once on
+  Oscar (or any build host) and copy the binary. Only the build host needs Bun.
 
 ---
 
 ## han (VPS) — Ubuntu, ZeroClaw
 
-### 1. Install Bun + clone
+### 1. Ship prebuilt binary (no Bun needed on han)
+From Oscar (build host):
 ```sh
-curl -fsSL https://bun.sh/install | bash
-source ~/.bashrc
+# build (on Oscar)
+cd ~/dev/memory && bun run build
+# copy binary + memo script + scanner to han
+scp ~/.local/bin/memory ubuntu@<han-tailscale-ip>:~/.local/bin/memory
+scp ~/.optmem/memo ubuntu@<han-tailscale-ip>:~/.optmem/memo
+scp ~/dev/memory/scripts/scan-secrets.sh ubuntu@<han-tailscale-ip>:~/.local/share/memory/scan-secrets.sh
+```
+On han:
+```sh
+chmod +x ~/.local/bin/memory ~/.optmem/memo ~/.local/share/memory/scan-secrets.sh
+# (optional) clone repo read-only for docs/scripts reference:
 git clone git@github.com:farishan/memory.git ~/dev/memory
-cd ~/dev/memory && bun install && bun run build
 ```
 
 ### 2. Config
@@ -41,7 +52,7 @@ sync:
   auto_pull: false
   lock_file: ~/.local/state/memory/write.lock
 secrets:
-  scanner: ~/dev/memory/scripts/scan-secrets.sh
+  scanner: ~/.local/share/memory/scan-secrets.sh
   block_on_match: true
 EOF
 chmod +x ~/dev/memory/scripts/scan-secrets.sh
@@ -73,13 +84,23 @@ memory list-adapters # optmem
 
 ## Mac (personal mode) — macOS
 
-### 1. Install Bun + clone
+### 1. Ship prebuilt binary (no Bun needed on Mac)
+From Oscar (build host), build a macOS binary (requires Bun on a Mac or
+cross-compile; Bun supports `--target`):
 ```sh
-curl -fsSL https://bun.sh/install | bash
-# restart shell, then:
-git clone git@github.com:farishan/memory.git ~/dev/memory
-cd ~/dev/memory && bun install && bun run build
+# on a Mac build host (or Oscar if targeting linux only):
+cd ~/dev/memory && bun build --compile --target=bun-darwin-arm64 src/cli/index.ts --outfile memory-mac-arm64
+# for Intel Macs: --target=bun-darwin-x64
 ```
+Copy to Mac:
+```sh
+scp memory-mac-arm64 <user>@<mac-tailscale-ip>:~/.local/bin/memory
+scp ~/.optmem/memo <user>@<mac-tailscale-ip>:~/.optmem/memo
+scp ~/dev/memory/scripts/scan-secrets.sh <user>@<mac-tailscale-ip>:~/.local/share/memory/scan-secrets.sh
+chmod +x ~/.local/bin/memory ~/.optmem/memo ~/.local/share/memory/scan-secrets.sh
+```
+Alternative: enable Remote Login on the Mac and run the above; or copy via
+AirDrop/USB and install manually.
 
 ### 2. Config
 ```sh
@@ -101,7 +122,7 @@ sync:
   auto_pull: false
   lock_file: ~/.local/state/memory/write.lock
 secrets:
-  scanner: ~/dev/memory/scripts/scan-secrets.sh
+  scanner: ~/.local/share/memory/scan-secrets.sh
   block_on_match: true
 EOF
 chmod +x ~/dev/memory/scripts/scan-secrets.sh

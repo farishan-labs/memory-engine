@@ -170,7 +170,7 @@ sync:
   lock_file: ~/.local/state/memory/write.lock
 
 secrets:
-  scanner: ~/dev/memory/scripts/scan-secrets.sh
+  scanner: ~/.local/share/memory/scan-secrets.sh
   block_on_match: true
 ```
 
