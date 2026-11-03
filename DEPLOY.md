@@ -162,6 +162,6 @@ memory list-adapters
 - To remove: `rm ~/.local/bin/memory`, keep `~/.optmem/` untouched.
 
 ## Open follow-ups
-- Migrate AGENTS.md + opencode plugin to call `memory` instead of `~/.optmem/memo` (Phase 2).
+- [done 2026-11-04] Migrate AGENTS.md + opencode plugin to call `memory` instead of `~/.optmem/memo` (Phase 2).
 - Decide Mac identity name (currently "mac"; could be "oscar-mac" if same person).
 - Create GitHub remote for `farishan/memory` (done on Oscar; clone on others uses it).
