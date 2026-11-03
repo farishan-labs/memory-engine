@@ -123,7 +123,15 @@ async function main(): Promise<void> {
       const text = rest[0]!;
       const { adapter, cfg } = await getActiveAdapter();
       await withWriteLock(cfg.sync.lock_file, async () => {
+        try { await adapter.pull(); } catch (e) { /* best-effort */ }
         await adapter.note(text);
+        const scan = scanSecrets(cfg.secrets.scanner);
+        if (scan.ok || !cfg.secrets.block_on_match) {
+          try { await adapter.push(); } catch (e) { console.error("push failed:", e instanceof Error ? e.message : String(e)); }
+        } else {
+          console.error(scan.output);
+          console.error("push blocked by secrets scan.");
+        }
       });
       return;
     }
@@ -153,7 +161,15 @@ async function main(): Promise<void> {
       const text = rest.slice(1).join(" ");
       const { adapter, cfg } = await getActiveAdapter();
       await withWriteLock(cfg.sync.lock_file, async () => {
+        try { await adapter.pull(); } catch (e) { /* best-effort */ }
         await adapter.nap(block, text);
+        const scan = scanSecrets(cfg.secrets.scanner);
+        if (scan.ok || !cfg.secrets.block_on_match) {
+          try { await adapter.push(); } catch (e) { console.error("push failed:", e instanceof Error ? e.message : String(e)); }
+        } else {
+          console.error(scan.output);
+          console.error("push blocked by secrets scan.");
+        }
       });
       return;
     }
@@ -162,7 +178,15 @@ async function main(): Promise<void> {
       if (rest.length !== 1) die("usage: memory forget <id>");
       const { adapter, cfg } = await getActiveAdapter();
       await withWriteLock(cfg.sync.lock_file, async () => {
+        try { await adapter.pull(); } catch (e) { /* best-effort */ }
         await adapter.forget(rest[0]!);
+        const scan = scanSecrets(cfg.secrets.scanner);
+        if (scan.ok || !cfg.secrets.block_on_match) {
+          try { await adapter.push(); } catch (e) { console.error("push failed:", e instanceof Error ? e.message : String(e)); }
+        } else {
+          console.error(scan.output);
+          console.error("push blocked by secrets scan.");
+        }
       });
       console.log(`Forgot ${rest[0]!}.`);
       return;
@@ -208,7 +232,16 @@ async function main(): Promise<void> {
       if (rest.length !== 1) die("usage: memory import <path>");
       const { adapter, cfg } = await getActiveAdapter();
       const report = await withWriteLock(cfg.sync.lock_file, async () => {
-        return await adapter.import(rest[0]!);
+        try { await adapter.pull(); } catch (e) { /* best-effort */ }
+        const r = await adapter.import(rest[0]!);
+        const scan = scanSecrets(cfg.secrets.scanner);
+        if (scan.ok || !cfg.secrets.block_on_match) {
+          try { await adapter.push(); } catch (e) { console.error("push failed:", e instanceof Error ? e.message : String(e)); }
+        } else {
+          console.error(scan.output);
+          console.error("push blocked by secrets scan.");
+        }
+        return r;
       });
       console.log(`Imported ${report.imported}, skipped ${report.skipped}.`);
       return;
