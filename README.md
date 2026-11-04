@@ -22,6 +22,7 @@ memory recall 'regex'
 memory status
 memory push        # git push store
 memory pull        # git pull store
+memory --version   # print CLI version
 ```
 
 ## Files
@@ -42,4 +43,4 @@ See SPEC §Secrets hygiene.
 
 ## Status
 
-Phase 0 (design + wrap). v1 implementation follows. Open questions in SPEC §Open questions.
+Phase 0 (design + wrap) shipped. Phase 2 migration (callers switched from ~/.optmem/memo to memory CLI) completed 2026-11-04. v1 implementation follows. Open questions in SPEC §Open questions.

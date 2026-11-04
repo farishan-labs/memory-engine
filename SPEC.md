@@ -1,5 +1,7 @@
 # SPEC — memory v1 (Phase 0)
 
+Phase 2 migration (callers switched from ~/.optmem/memo to memory CLI) completed 2026-11-04.
+
 Date: 2026-11-03. Status: design, decisions made, implementation pending.
 
 ## 1. Purpose
