@@ -5,14 +5,14 @@ existing `optmem` store behind a stable adapter contract so future backends
 (agent-shared-memory, SQLite, etc.) can plug in without changing callers.
 
 - **Single active adapter** at a time. No concurrent multi-adapter use in v1.
-- **Standalone repo**: `~/dev/memory` (this directory). Git transport for sync.
+- **Standalone repo**: `~/dev/personal/memory` (this directory). Git transport for sync.
 - **Wraps optmem**: no data migration in Phase 0 — same store, same notes.
 
 ## Quick start
 
 ```sh
 # install (once)
-cd ~/dev/memory && bun install && bun run build
+cd ~/dev/personal/memory && bun install && bun run build
 # produces ~/.local/bin/memory (compiled single binary via bun build --compile)
 
 # daily use (delegates to active adapter = optmem)
