@@ -29,7 +29,7 @@ export class OptmemAdapter implements Adapter {
   private cfg: AdapterConfig = {};
   private bin = "";
   private dir = "";
-  private gitRemote = "git@github.com:farishan/optmem.git";
+  private gitRemote = "git@github.com:farishan/memory-data.git";
 
   async init(cfg: AdapterConfig): Promise<void> {
     this.cfg = cfg;

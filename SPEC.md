@@ -162,7 +162,7 @@ adapters:
   optmem:
     data_dir: ~/.optmem/memory
     memo_bin: ~/.optmem/memo
-    git_remote: git@github.com:farishan/optmem.git
+    git_remote: git@github.com:farishan/memory-data.git
     max_bytes: 280
 
 sync:
@@ -261,7 +261,7 @@ exports optmem lines and ingests into target adapter; dedups by exact text.
 - [ ] Clone/install `~/dev/personal/memory`, `bun install && bun run build` → `~/.local/bin/memory`.
 - [ ] `mkdir -p ~/.config/memory ~/.local/state/memory`.
 - [ ] Write config with `machine: han`, data_dir `~/.optmem/memory`.
-- [ ] Verify `~/.optmem/memory` clone + remote `git@github.com:farishan/optmem.git`.
+- [ ] Verify `~/.optmem/memory` clone + remote `git@github.com:farishan/memory-data.git`.
 - [ ] SSH key for git remote present + tested (`ssh -T git@github.com`).
 - [ ] `MEMORY.md` identity line = han.
 - [ ] `memory status` green.

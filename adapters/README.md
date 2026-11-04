@@ -64,7 +64,7 @@ Mapping:
 
 - `data_dir` (default `~/.optmem/memory`)
 - `memo_bin` (default `~/.optmem/memo`)
-- `git_remote` (default `git@github.com:farishan/optmem.git`)
+- `git_remote` (default `git@github.com:farishan/memory-data.git`)
 - `max_bytes` (default 280)
 
 ### Validation (Init)

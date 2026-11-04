@@ -4,7 +4,7 @@ Repo: https://github.com/farishan/memory (private)
 Binary: `~/.local/bin/memory` (compiled single binary via `bun build --compile`)
 
 ## Prerequisites (both machines)
-- Git + SSH key with read access to `farishan/memory` and `farishan/optmem`
+- Git + SSH key with read access to `farishan/memory` and `farishan/memory-data`
 - `~/.optmem/memory` clone present (optmem store) — do NOT modify it
 - `~/.local/bin` on PATH
 - **Bun is NOT required on target machines.** The `memory` binary is a
@@ -44,7 +44,7 @@ adapters:
   optmem:
     data_dir: ~/.optmem/memory
     memo_bin: ~/.optmem/memo
-    git_remote: git@github.com:farishan/optmem.git
+    git_remote: git@github.com:farishan/memory-data.git
     max_bytes: 280
 sync:
   transport: git
@@ -114,7 +114,7 @@ adapters:
   optmem:
     data_dir: ~/.optmem/memory
     memo_bin: ~/.optmem/memo
-    git_remote: git@github.com:farishan/optmem.git
+    git_remote: git@github.com:farishan/memory-data.git
     max_bytes: 280
 sync:
   transport: git

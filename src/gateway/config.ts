@@ -29,7 +29,7 @@ const DEFAULT_CONFIG: MemoryConfig = {
     optmem: {
       data_dir: "~/.optmem/memory",
       memo_bin: "~/.optmem/memo",
-      git_remote: "git@github.com:farishan/optmem.git",
+      git_remote: "git@github.com:farishan/memory-data.git",
       max_bytes: 280,
     },
   },
