@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 import { getAdapter, listAdapters } from "../adapter/registry";
+import { getIdentity } from "../gateway/identity";
 import type { Adapter } from "../adapter/types";
 import { loadConfig, saveConfig, ensureConfig, configPath, expand } from "../gateway/config";
 import { withWriteLock, withReadLock } from "../gateway/lock";
-import { getIdentity } from "../gateway/identity";
 import { pull as gitPull, push as gitPush, syncStatus } from "../gateway/sync";
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -45,7 +45,7 @@ function parseFlag(args: string[], name: string): string | undefined {
 async function getActiveAdapter(): Promise<{ adapter: Adapter; cfg: ReturnType<typeof loadConfig> }> {
   const cfg = loadConfig();
   const adapterCfg = (cfg.adapters?.[cfg.active_adapter] ?? {}) as Record<string, unknown>;
-  adapterCfg.machine = cfg.identity.machine;
+  adapterCfg.machine = getIdentity().machine;
   const adapter = getAdapter(cfg.active_adapter);
   await adapter.init(adapterCfg);
   return { adapter, cfg };
@@ -108,7 +108,7 @@ async function main(): Promise<void> {
       console.log(`adapter: ${meta.name} ${meta.version}`);
       console.log(`data: ${meta.dataLocation}`);
       console.log(`capabilities: ${meta.capabilities.join(", ")}`);
-      console.log(`identity: ${cfg.identity.user}@${cfg.identity.machine}`);
+      console.log(`identity: ${getIdentity().user}@${getIdentity().machine}`);
       console.log(`sync: dirty=${ss.dirty} ahead=${ss.ahead} behind=${ss.behind} branch=${ss.branch ?? "?"}`);
       return;
     }

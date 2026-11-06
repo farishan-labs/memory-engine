@@ -198,8 +198,12 @@ Created: 2026-...
 - (auto) ...
 ```
 
-- On conflict between config `machine` and `MEMORY.md`, `MEMORY.md` wins and
-  config is logged as drifted (not silently overwritten).
+- Identity is resolved dynamically per machine: the local config
+  (`~/.config/memory/config.yaml`, which is NOT shared across machines) is
+  authoritative. `MEMORY.md` lives in the shared store repo and is
+  informational only — it never overrides the local identity. Drift between
+  the two is logged (warning) but does not change the resolved identity.
+  `MEMORY_MACHINE` env var remains an emergency override.
 - Notes themselves are not prefixed with machine; attribution lives in
   `MEMORY.md` + git commit author. (Alternative: prefix every note — rejected
   for optmem compat, since optmem lines are the contract.)

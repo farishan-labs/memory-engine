@@ -171,8 +171,8 @@ export class OptmemAdapter implements Adapter {
 
   async push(): Promise<void> {
     const { push } = await import("../../gateway/sync");
-    const cfg = (await import("../../gateway/config")).loadConfig();
-    const machine = cfg.identity.machine;
+    const { getIdentity } = await import("../../gateway/identity");
+    const machine = getIdentity().machine;
     const res = push(this.dir, machine);
     if (!res.ok) throw new Error(`optmem: push failed: ${res.message}`);
   }

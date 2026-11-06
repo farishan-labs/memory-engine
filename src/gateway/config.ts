@@ -24,7 +24,7 @@ export interface MemoryConfig {
 
 const DEFAULT_CONFIG: MemoryConfig = {
   active_adapter: "optmem",
-  identity: { user: "faris", machine: "oscar" },
+  identity: { user: "faris", machine: "" },
   adapters: {
     optmem: {
       data_dir: "~/.optmem/memory",
