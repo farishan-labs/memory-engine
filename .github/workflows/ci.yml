@@ -1,3 +1,6 @@
+# NOTE: CI runs only on PR + push to main to avoid noisy runs.
+# Email-on-failure: GitHub notifies watchers by default; disable in GitHub Settings -> Notifications -> Actions,
+# or repo Settings -> Notifications. Non-blocking steps use continue-on-error.
 name: CI
 
 on:
