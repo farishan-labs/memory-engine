@@ -262,7 +262,7 @@ exports optmem lines and ingests into target adapter; dedups by exact text.
 ## 13. Deployment checklist
 
 ### han (VPS)
-- [ ] Clone/install `~/dev/personal/memory`, `bun install && bun run build` → `~/.local/bin/memory`.
+- [ ] Clone/install `~/dev/labs/memory-engine`, `bun install && bun run build` → `~/.local/bin/memory`.
 - [ ] `mkdir -p ~/.config/memory ~/.local/state/memory`.
 - [ ] Write config with `machine: han`, data_dir `~/.optmem/memory`.
 - [ ] Verify `~/.optmem/memory` clone + remote `git@github.com:farishan/memory-data.git`.
@@ -307,7 +307,7 @@ Exit codes: 0 ok, 1 user error, 2 lock timeout, 3 adapter error, 4 sync conflict
 ## 15. File layout of this repo
 
 ```
-~/dev/personal/memory/
+~/dev/labs/memory-engine/
 ├── README.md
 ├── SPEC.md
 ├── adapters/

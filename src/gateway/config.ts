@@ -40,7 +40,7 @@ const DEFAULT_CONFIG: MemoryConfig = {
     lock_file: "~/.local/state/memory/write.lock",
   },
   secrets: {
-    scanner: "~/dev/memory/scripts/scan-secrets.sh",
+    scanner: "~/dev/labs/memory-engine/scripts/scan-secrets.sh",
     block_on_match: true,
   },
 };

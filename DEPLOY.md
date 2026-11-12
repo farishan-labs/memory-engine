@@ -1,10 +1,10 @@
 # Deployment — memory (Phase 0) to han (VPS) and Mac (personal mode)
 
-Repo: https://github.com/farishan/memory (private)
+Repo: https://github.com/farishan-labs/memory-engine
 Binary: `~/.local/bin/memory` (compiled single binary via `bun build --compile`)
 
 ## Prerequisites (both machines)
-- Git + SSH key with read access to `farishan/memory` and `farishan/memory-data`
+- Git + SSH key with read access to `farishan-labs/memory-engine` and `farishan/memory-data`
 - `~/.optmem/memory` clone present (optmem store) — do NOT modify it
 - `~/.local/bin` on PATH
 - **Bun is NOT required on target machines.** The `memory` binary is a
@@ -19,17 +19,17 @@ Binary: `~/.local/bin/memory` (compiled single binary via `bun build --compile`)
 From Oscar (build host):
 ```sh
 # build (on Oscar)
-cd ~/dev/personal/memory && bun run build
+cd ~/dev/labs/memory-engine && bun run build
 # copy binary + memo script + scanner to han
 scp ~/.local/bin/memory ubuntu@<han-tailscale-ip>:~/.local/bin/memory
 scp ~/.optmem/memo ubuntu@<han-tailscale-ip>:~/.optmem/memo
-scp ~/dev/personal/memory/scripts/scan-secrets.sh ubuntu@<han-tailscale-ip>:~/.local/share/memory/scan-secrets.sh
+scp ~/dev/labs/memory-engine/scripts/scan-secrets.sh ubuntu@<han-tailscale-ip>:~/.local/share/memory/scan-secrets.sh
 ```
 On han:
 ```sh
 chmod +x ~/.local/bin/memory ~/.optmem/memo ~/.local/share/memory/scan-secrets.sh
 # (optional) clone repo read-only for docs/scripts reference:
-git clone git@github.com:farishan/memory.git ~/dev/personal/memory
+git clone git@github.com:farishan-labs/memory-engine.git ~/dev/labs/memory-engine
 ```
 
 ### 2. Config
@@ -55,7 +55,7 @@ secrets:
   scanner: ~/.local/share/memory/scan-secrets.sh
   block_on_match: true
 EOF
-chmod +x ~/dev/personal/memory/scripts/scan-secrets.sh
+chmod +x ~/dev/labs/memory-engine/scripts/scan-secrets.sh
 ```
 
 ### 3. Identity anchor
@@ -89,14 +89,14 @@ From Oscar (build host), build a macOS binary (requires Bun on a Mac or
 cross-compile; Bun supports `--target`):
 ```sh
 # on a Mac build host (or Oscar if targeting linux only):
-cd ~/dev/personal/memory && bun build --compile --target=bun-darwin-arm64 src/cli/index.ts --outfile memory-mac-arm64
+cd ~/dev/labs/memory-engine && bun build --compile --target=bun-darwin-arm64 src/cli/index.ts --outfile memory-mac-arm64
 # for Intel Macs: --target=bun-darwin-x64
 ```
 Copy to Mac:
 ```sh
 scp memory-mac-arm64 <user>@<mac-tailscale-ip>:~/.local/bin/memory
 scp ~/.optmem/memo <user>@<mac-tailscale-ip>:~/.optmem/memo
-scp ~/dev/personal/memory/scripts/scan-secrets.sh <user>@<mac-tailscale-ip>:~/.local/share/memory/scan-secrets.sh
+scp ~/dev/labs/memory-engine/scripts/scan-secrets.sh <user>@<mac-tailscale-ip>:~/.local/share/memory/scan-secrets.sh
 chmod +x ~/.local/bin/memory ~/.optmem/memo ~/.local/share/memory/scan-secrets.sh
 ```
 Alternative: enable Remote Login on the Mac and run the above; or copy via
@@ -125,7 +125,7 @@ secrets:
   scanner: ~/.local/share/memory/scan-secrets.sh
   block_on_match: true
 EOF
-chmod +x ~/dev/personal/memory/scripts/scan-secrets.sh
+chmod +x ~/dev/labs/memory-engine/scripts/scan-secrets.sh
 ```
 
 ### 3. Identity anchor
@@ -164,4 +164,4 @@ memory list-adapters
 ## Open follow-ups
 - [done 2026-11-04] Migrate AGENTS.md + opencode plugin to call `memory` instead of `~/.optmem/memo` (Phase 2).
 - Decide Mac identity name (currently "mac"; could be "oscar-mac" if same person).
-- Create GitHub remote for `farishan/memory` (done on Oscar; clone on others uses it).
+- Create GitHub remote for `farishan-labs/memory-engine` (done on Oscar; clone on others uses it).

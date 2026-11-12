@@ -5,14 +5,14 @@ existing `optmem` store behind a stable adapter contract so future backends
 (agent-shared-memory, SQLite, etc.) can plug in without changing callers.
 
 - **Single active adapter** at a time. No concurrent multi-adapter use in v1.
-- **Standalone repo**: `~/dev/personal/memory` (this directory). Git transport for sync.
+- **Standalone repo**: `~/dev/labs/memory-engine` (this directory). Git transport for sync.
 - **Wraps optmem**: no data migration in Phase 0 — same store, same notes.
 
 ## Quick start
 
 ```sh
 # install (once)
-cd ~/dev/personal/memory && bun install && bun run build
+cd ~/dev/labs/memory-engine && bun install && bun run build
 # produces ~/.local/bin/memory (compiled single binary via bun build --compile)
 
 # daily use (delegates to active adapter = optmem)
@@ -44,3 +44,11 @@ See SPEC §Secrets hygiene.
 ## Status
 
 Phase 0 (design + wrap) shipped. Phase 2 migration (callers switched from ~/.optmem/memo to memory CLI) completed 2026-11-04. v1 implementation follows. Open questions in SPEC §Open questions.
+## Napper agent
+
+Long naps (compressing many blocks) block the main agent. Spawn the **Napper**
+subagent instead of running `memory nap` inline. Skill: `skills/napper/SKILL.md`.
+Role contract: `farishan-labs/agent` → `roles/napper.yaml`.
+
+Rule: main agent must not run `memory nap` for >1 block or >N lines directly;
+hand the block list to Napper and continue with the report.
