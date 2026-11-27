@@ -1,0 +1,30 @@
+schema: spec-driven
+
+# Project context (shown to AI when creating artifacts)
+context: |
+  Project: memory-engine — FHL unified agent memory CLI (Phase 0 wraps optmem).
+  Tech stack: Bun/TypeScript, compiles to ~/.local/bin/memory; git transport for sync; YAML config.
+  Conventions: P-001..P-024 from <owner>/principles; OptMem store at ~/.optmem/memory; trash rule.
+  Related repos: <owner>/agent (personal core), <owner>/principles.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

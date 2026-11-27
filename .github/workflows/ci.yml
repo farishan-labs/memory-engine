@@ -1,0 +1,45 @@
+# NOTE: CI runs only on PR + push to main to avoid noisy runs.
+# Email-on-failure: GitHub notifies watchers by default; disable in GitHub Settings -> Notifications -> Actions,
+# or repo Settings -> Notifications. Non-blocking steps use continue-on-error.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/checkout@v4
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+      - run: bun install
+      - run: bun run typecheck
+      - name: Install optmem memo (vendored)
+        run: |
+          mkdir -p ~/.optmem
+          cp scripts/memo ~/.optmem/memo
+          chmod +x ~/.optmem/memo
+      - name: Build memory CLI
+        run: |
+          mkdir -p ~/.local/bin
+          bun build --compile src/cli/index.ts --outfile ~/.local/bin/memory
+      - run: bash test/smoke.sh ~/.local/bin/memory
